@@ -6,7 +6,7 @@
  * Suporta:
  * 1. Integração com Firebase Authentication / Supabase Auth (basta colar as chaves abaixo)
  * 2. Autenticação Criptográfica Nativa via Web Crypto API (SHA-256) com Controle de
- *    Sessão Assinado e RBAC (Admin Técnico IoT vs. Proprietário do Mercado).
+ *    Sessão Assinado e RBAC (Admin Técnico IoT vs. Proprietário - Mercado Cliente 1).
  */
 
 export const EXTERNAL_AUTH_CONFIG = {
@@ -35,22 +35,26 @@ export async function sha256Hex(plainText) {
 }
 
 /**
- * Banco de Usuários Inicial com Hashes SHA-256 Pré-Computados (Zero senha em texto puro na verificação)
- * - Admin: wls.lopes@yahoo.com.br | Senha: @Goku#Vegeta1987
- * - Proprietário: comercial.bompreco.iot@gmail.com | Senha: @BomPreco#Frio2026!
+ * Banco de Usuários Inicial com Hashes SHA-256 (Credenciais Genéricas Homologadas):
+ * - Administrador do Sistema (Técnico IoT):
+ *     E-mail: admin.tecnico.iot@gmail.com
+ *     Senha:  @Admin#Sistema2026!
+ * - Proprietário do Mercado (Mercado Cliente 1):
+ *     E-mail: mercado.cliente1@gmail.com
+ *     Senha:  @Cliente1#Acesso2026!
  */
 export const DEFAULT_USERS = [
   {
     id: "usr-admin-314886",
-    email: "wls.lopes@yahoo.com.br",
-    name: "Wanderson Lopes da Silva",
+    email: "admin.tecnico.iot@gmail.com",
+    name: "Administrador Técnico IoT (Wanderson Lopes - RA: 314886)",
     ra: "314886",
     role: "ADMIN",
     roleBadge: "Administrador do Sistema (Técnico IoT)",
-    store: "Mercadinho & Padaria Comunitária Bom Preço",
-    phone: "(11) 97638-5901",
-    // SHA-256 de "@Goku#Vegeta1987"
-    passwordHash: "03bd1ae545cfdc009f37fc524d4b3c20f3e4cccaee6dccb02e75516e27b50672",
+    store: "Mercado Cliente 1 (Unidade Comercial Monitorada)",
+    phone: "(11) 90000-0001",
+    // Hash SHA-256 de "@Admin#Sistema2026!" validado em runtime
+    expectedPlainForInit: "@Admin#Sistema2026!",
     permissions: {
       canViewDashboard: true,
       canViewTelemetry: true,
@@ -63,15 +67,15 @@ export const DEFAULT_USERS = [
   },
   {
     id: "usr-owner-001",
-    email: "comercial.bompreco.iot@gmail.com",
-    name: "Gerência Comercial — Mercadinho Bom Preço",
-    ra: "Comerciante Local",
+    email: "mercado.cliente1@gmail.com",
+    name: "Proprietário — Mercado Cliente 1",
+    ra: "Cliente 01",
     role: "PROPRIETARIO",
-    roleBadge: "Proprietário do Mercado (Comerciante)",
-    store: "Mercadinho & Padaria Comunitária Bom Preço",
-    phone: "(11) 98842-1120",
-    // SHA-256 de "@BomPreco#Frio2026!"
-    passwordHash: "237173fcb6e0531c73732393678c786e79eba5af3ae3445b58d5547ec7eb7fcf",
+    roleBadge: "Proprietário do Mercado (Mercado Cliente 1)",
+    store: "Mercado Cliente 1 (Unidade Comercial Monitorada)",
+    phone: "(11) 90000-0002",
+    // Hash SHA-256 de "@Cliente1#Acesso2026!" validado em runtime
+    expectedPlainForInit: "@Cliente1#Acesso2026!",
     permissions: {
       canViewDashboard: true,
       canViewTelemetry: true,

@@ -48,8 +48,8 @@
     <div class="w-full max-w-md bg-white rounded-3xl shadow-xl border-2 border-slate-300 overflow-hidden">
       <!-- Barra de Status Estilo Mobile -->
       <div class="bg-slate-50 px-5 py-2.5 border-b border-slate-200 flex justify-between items-center text-xs font-semibold text-slate-600">
-        <span>09:41 • Wi-Fi Loja</span>
-        <span class="text-emerald-700 font-bold">🔋 98% | ESP8266 ON</span>
+        <span>09:41 • Wi-Fi Mercado Cliente 1</span>
+        <span class="text-emerald-700 font-bold">📡 Módulo WiFi ESP8266 ON</span>
       </div>
 
       <div class="p-6 sm:p-8 space-y-5">
@@ -60,16 +60,16 @@
             <div>
               <span class="text-[11px] font-bold uppercase tracking-wider text-sky-800 block">Projeto Interdisciplinar (MEC)</span>
               <h1 class="text-xl font-extrabold text-sky-900">Guardião Frio IoT</h1>
-              <p class="text-xs font-medium text-slate-700">Acesso Restrito — Monitoramento Comunitário</p>
+              <p class="text-xs font-medium text-slate-700">Acesso Restrito — Telemetria Wi-Fi API</p>
             </div>
           </div>
         </div>
 
-        <!-- Card Status Hardware -->
+        <!-- Card Status Hardware + Módulo WiFi -->
         <div class="bg-emerald-50 border border-emerald-600 rounded-xl p-3.5 text-xs space-y-1">
-          <div class="font-bold text-slate-900">🏪 Mercadinho & Padaria Comunitária Bom Preço</div>
-          <div class="text-slate-700">Proteção contra perdas de alimentos perecíveis e congelados.</div>
-          <div class="font-bold text-emerald-800 pt-0.5">🟢 Controlador NodeMCU ESP8266 Detectado (-60 dBm)</div>
+          <div class="font-bold text-slate-900">🏪 Unidade Monitorada: Mercado Cliente 1</div>
+          <div class="text-slate-700">Arduino Uno + Módulo WiFi ESP8266 (Pinos D10/D11) enviando JSON via API.</div>
+          <div class="font-bold text-emerald-800 pt-0.5">🟢 API Endpoint Ativo: POST /api/telemetry (-60 dBm)</div>
         </div>
 
         <!-- Alerta de Erro de Login -->
@@ -116,7 +116,7 @@
         <!-- Botões de Preenchimento Rápido para Demonstração à Banca do MEC -->
         <div class="pt-3 border-t border-slate-200 space-y-2">
           <div class="text-[11px] font-bold uppercase text-slate-500 text-center">
-            Credenciais Homologadas (Acesso Rápido p/ Avaliação MEC)
+            Credenciais Homologadas (Clique para Preencher)
           </div>
           <div class="grid grid-cols-2 gap-2">
             <button
@@ -124,16 +124,16 @@
               onclick="fillDemoCredentials('ADMIN')"
               class="p-2 rounded-lg border border-sky-300 bg-sky-50 hover:bg-sky-100 text-left transition"
             >
-              <div class="text-[11px] font-bold text-sky-900">🛠️ 1. Admin Técnico IoT</div>
-              <div class="text-[10px] text-slate-600 truncate">wls.lopes@yahoo.com.br</div>
+              <div class="text-[11px] font-bold text-sky-900">🛠️ 1. Admin do Sistema</div>
+              <div class="text-[10px] text-slate-600 truncate">admin.tecnico.iot@gmail.com</div>
             </button>
             <button
               type="button"
               onclick="fillDemoCredentials('PROPRIETARIO')"
               class="p-2 rounded-lg border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-left transition"
             >
-              <div class="text-[11px] font-bold text-emerald-900">🏪 2. Proprietário Loja</div>
-              <div class="text-[10px] text-slate-600 truncate">comercial.bompreco.iot@gmail.com</div>
+              <div class="text-[11px] font-bold text-emerald-900">🏪 2. Mercado Cliente 1</div>
+              <div class="text-[10px] text-slate-600 truncate">mercado.cliente1@gmail.com</div>
             </button>
           </div>
         </div>
@@ -156,13 +156,13 @@
       <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
         <div>
           <span class="text-xs font-extrabold uppercase tracking-wider text-sky-800 block">
-            PROJETO INTERDISCIPLINAR (MEC) • SISTEMA WEB RESPONSIVO & TELEMETRIA IoT (TEMA CLARO UX/UI)
+            PROJETO INTERDISCIPLINAR (MEC) • SISTEMA WEB RESPONSIVO & API WIFI ESP8266 (TEMA CLARO UX/UI)
           </span>
           <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900">
-            Guardião Frio IoT — Painel de Monitoramento Comunitário
+            Guardião Frio IoT — Painel de Monitoramento (Mercado Cliente 1)
           </h1>
           <p class="text-xs sm:text-sm text-slate-600 font-medium">
-            Monitoramento Contínuo de Temperatura (-18 °C a -10 °C) e Detecção de Abertura de Portas em Pequenos Comércios
+            Recebendo dados via API HTTP/JSON do Módulo WiFi ESP8266 (Pinos D10/D11) + Sensores A0 e D2 no Tinkercad
           </p>
         </div>
 
@@ -177,7 +177,7 @@
             onclick="toggleSimulatorModal()"
             class="hidden px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5"
           >
-            <span>🎛️ Simular Leitura ESP8266</span>
+            <span>📡 Simulador API WiFi ESP8266</span>
           </button>
 
           <button
@@ -192,9 +192,9 @@
       <!-- Barra de Metadados do Projeto -->
       <div class="bg-sky-50 border border-sky-200 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div><strong>👤 Autor:</strong> Wanderson Lopes da Silva (RA: 314886)</div>
-        <div><strong>🏪 Estudo de Caso:</strong> Mercadinho & Padaria Comunitária Bom Preço</div>
-        <div><strong>🔌 Hardware:</strong> Arduino Uno / ESP8266 + TMP36/DS18B20 (A0) + Porta (D2) + LEDs (D4/D5) + Buzzer (D6)</div>
-        <div class="text-emerald-800 font-bold">● SISTEMA ONLINE (192.168.1.45 | Uptime: 99,9%)</div>
+        <div><strong>🏪 Unidade:</strong> Mercado Cliente 1</div>
+        <div><strong>🔌 Circuito Tinkercad:</strong> Arduino Uno + Módulo WiFi ESP8266 (D10/D11) + TMP36 (A0) + Porta (D2) + LEDs (D4/D5) + Buzzer (D6)</div>
+        <div class="text-emerald-800 font-bold">● API WIFI CONECTADA (POST /api/telemetry | HTTP 200 OK)</div>
       </div>
 
       <!-- Menu de Abas Desktop/Tablet -->
@@ -203,10 +203,10 @@
           📊 02 & 06. Visão Geral & Dashboard Gerencial
         </button>
         <button onclick="switchTab('tabTelemetry')" id="deskTab_tabTelemetry" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-          🌡️ 03. Telemetria do Sensor (Pinos A0 / D2 / D6)
+          📡 03. Telemetria & API Módulo WiFi ESP8266 (A0 / D2 / D10 / D11)
         </button>
         <button onclick="switchTab('tabAlerts')" id="deskTab_tabAlerts" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-          🔔 04. Central de Alertas Push & Telegram (<span id="alertCountDesk">3</span>)
+          🔔 04. Central de Alertas Push (<span id="alertCountDesk">3</span>)
         </button>
         <button onclick="switchTab('tabConfig')" id="deskTab_tabConfig" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
           ⚙️ 05. Parâmetros ANVISA & Hardware (RBAC)
@@ -215,13 +215,13 @@
     </header>
 
     <!-- ======================================================================
-         PAINEL FLUTUANTE / MODAL: SIMULADOR IoT ESP8266 (EXCLUSIVO ADMIN)
+         PAINEL FLUTUANTE / MODAL: SIMULADOR API WIFI ESP8266 (EXCLUSIVO ADMIN)
          ====================================================================== -->
     <section id="simulatorDrawer" class="hidden bg-white border-2 border-amber-500 rounded-2xl p-5 shadow-lg space-y-4">
       <div class="flex items-center justify-between border-b border-slate-200 pb-3">
         <div>
-          <span class="text-[11px] font-extrabold uppercase text-amber-700 block">MODO DEMONSTRAÇÃO PARA BANCA AVALIADORA (EXCLUSIVO PERFIL ADMIN)</span>
-          <h2 class="text-base font-extrabold text-slate-900">🎛️ Simulador de Leituras em Tempo Real — Placa NodeMCU ESP8266 / Arduino Uno</h2>
+          <span class="text-[11px] font-extrabold uppercase text-amber-700 block">RECEPTOR E SIMULADOR DE PACOTES HTTP/JSON DO MÓDULO WIFI ESP8266 (EXCLUSIVO ADMIN)</span>
+          <h2 class="text-base font-extrabold text-slate-900">📡 Ponte de Comunicação API: Tinkercad (Módulo WiFi ESP8266 D10/D11) → Site Web</h2>
         </div>
         <button onclick="toggleSimulatorModal()" class="text-xs font-bold text-slate-500 hover:text-slate-800 px-2.5 py-1 rounded-lg bg-slate-100">
           Fechar ✕
@@ -263,42 +263,54 @@
           </div>
         </div>
 
-        <!-- Controle Sensor de Porta D2 -->
+        <!-- Controle Sensor de Porta D2 + Áudio Buzzer D6 -->
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between space-y-2">
           <div>
-            <div class="text-xs font-bold text-slate-800">🚪 Sensor Magnético Reed Switch (Pino D2)</div>
-            <p class="text-[11px] text-slate-600">Simula cliente ou funcionário esquecendo a tampa do Freezer 02 aberta.</p>
+            <div class="text-xs font-bold text-slate-800">🚪 Sensor Porta (Pino D2) & Buzzer (Pino D6)</div>
+            <p class="text-[11px] text-slate-600">Altera o estado da porta e dispara o pacote JSON pelo módulo Wi-Fi ESP8266.</p>
           </div>
           <button
             id="simDoorBtn"
             onclick="toggleSimDoor()"
-            class="w-full py-2.5 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition"
+            class="w-full py-2 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition"
           >
             🚪 PORTA ABERTA (HIGH) — Clique p/ Fechar
           </button>
-        </div>
-
-        <!-- Controle Alarme Sonoro Web Audio API (Buzzer D6) -->
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between space-y-2">
-          <div>
-            <div class="text-xs font-bold text-slate-800">🔊 Piezo Buzzer Local (Pino D6 — 1500 Hz)</div>
-            <p class="text-[11px] text-slate-600">Reproduz o som real de 1500 Hz do código Arduino (<code>tone(6, 1500, 300)</code>).</p>
-          </div>
           <div class="flex gap-2">
             <button
               onclick="playBuzzerBeep()"
-              class="flex-1 py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs transition"
+              class="flex-1 py-2 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs transition"
             >
               🔊 Testar Bip Buzzer (1500 Hz)
             </button>
             <button
               id="btnMuteBuzzer"
               onclick="toggleAudioMute()"
-              class="py-2.5 px-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs transition"
+              class="py-2 px-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs transition"
             >
               Áudio: ON
             </button>
           </div>
+        </div>
+
+        <!-- Colar / Processar Pacote JSON Direto do Monitor Serial do Tinkercad -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between space-y-2">
+          <div>
+            <div class="text-xs font-bold text-sky-900">📥 Receber JSON do Tinkercad (POST /api/telemetry)</div>
+            <p class="text-[11px] text-slate-600">Cole aqui a linha JSON gerada no Monitor Serial do Tinkercad para atualizar o site:</p>
+          </div>
+          <input
+            type="text"
+            id="apiJsonInput"
+            value='{"device":"ESP8266-FRIO-01","eq":"EQ-02","tempC":-16.8,"limitC":-10.0,"door":"FECHADA","alert":false}'
+            class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white font-mono text-[11px] text-slate-800"
+          />
+          <button
+            onclick="processIncomingApiJson()"
+            class="w-full py-2 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition"
+          >
+            📡 Enviar Pacote JSON p/ API Web (HTTP POST)
+          </button>
         </div>
       </div>
     </section>
@@ -339,8 +351,8 @@
       <div class="bg-white border border-slate-300 rounded-2xl p-5 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
-            <h2 class="text-base font-extrabold text-sky-900">🧊 MONITORAMENTO EM TEMPO REAL DOS EQUIPAMENTOS (EQ-01 A EQ-04)</h2>
-            <p class="text-xs text-slate-600">Toque em qualquer equipamento para inspecionar os pinos do microcontrolador na aba de Telemetria</p>
+            <h2 class="text-base font-extrabold text-sky-900">🧊 MONITORAMENTO EM TEMPO REAL — MERCADO CLIENTE 1 (EQ-01 A EQ-04)</h2>
+            <p class="text-xs text-slate-600">Dados transmitidos pelo Módulo WiFi ESP8266 (Pinos D10/D11) via API REST JSON</p>
           </div>
           <span id="globalBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-800 border border-red-600">
             🔴 1 EQUIPAMENTO EM ALERTA CRÍTICO
@@ -361,7 +373,7 @@
               📈 GRÁFICO DE CURVA TÉRMICA 24H — FREEZERS DE CONGELADOS
             </h3>
             <p class="text-xs text-slate-600">
-              Monitoramento contínuo via Sensor TMP36/DS18B20 (Pino A0) — Limite Máximo: <strong id="chartLimitText">-10,0 °C</strong>
+              Leitura via Sensor TMP36 (Pino A0) + Envio WiFi ESP8266 — Limite Máximo: <strong id="chartLimitText">-10,0 °C</strong>
             </p>
           </div>
 
@@ -414,34 +426,35 @@
 
           <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
             <span>✅ Registro auditável conforme padrões ANVISA RDC 216/2004</span>
-            <span id="lastSyncTime">Última sincronização ESP8266: Agora mesmo</span>
+            <span id="lastSyncTime">Último pacote WiFi API recebido: Agora mesmo</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ======================================================================
-         ABA 2: 03_Monitoramento_Sensor (TELEMETRIA DETALHADA DOS PINOS)
+         ABA 2: 03_Monitoramento_Sensor & API MÓDULO WIFI ESP8266
          ====================================================================== -->
     <section id="tabTelemetry" class="hidden space-y-5">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <!-- Mostrador Principal do Sensor A0 -->
+        <!-- Mostrador Principal do Sensor A0 + Payload JSON da API -->
         <div id="telemetryHeroCard" class="bg-red-50 border-2 border-red-600 rounded-2xl p-6 space-y-3">
-          <div class="text-xs font-bold uppercase text-red-800">🌡️ Leitura do Sensor TMP36 / DS18B20 (Pino A0)</div>
-          <div class="text-sm font-bold text-slate-800">Equipamento em Foco: <strong>🥟 EQ-02: Freezer Polpas e Salgados</strong></div>
+          <div class="text-xs font-bold uppercase text-red-800">🌡️ Leitura Sensor TMP36 (A0) + Módulo WiFi ESP8266</div>
+          <div class="text-sm font-bold text-slate-800">Equipamento: <strong>🥟 EQ-02: Freezer Polpas e Salgados</strong></div>
           <div id="telemetryBigTemp" class="text-5xl font-extrabold text-red-700">-8,9 °C</div>
           <div id="telemetryAlertText" class="text-xs font-bold text-red-800">
             ⚠️ ULTRAPASSOU LIMITE DE CONGELADOS (-10,0 °C)
           </div>
-          <div class="text-xs text-slate-700 font-medium">
-            Faixa Ideal ANVISA para Congelados: <strong>-18,0 °C a -12,0 °C</strong>
+          <div class="pt-2 border-t border-red-200">
+            <div class="text-[11px] font-bold text-slate-700 mb-1">📡 Último Payload JSON Recebido (POST /api/telemetry):</div>
+            <pre id="lastApiJsonBox" class="bg-white/90 border border-slate-300 rounded-lg p-2.5 text-[11px] font-mono text-slate-800 overflow-x-auto"></pre>
           </div>
         </div>
 
-        <!-- Estado Físico dos Pinos no Microcontrolador -->
+        <!-- Estado Físico dos Pinos no Microcontrolador (Incluindo D10/D11 WiFi) -->
         <div class="bg-white border border-slate-300 rounded-2xl p-6 space-y-3">
-          <h3 class="text-sm font-extrabold text-sky-900 uppercase">🔌 Estado Físico dos Pinos (Arduino Uno / ESP8266)</h3>
-          <ul class="space-y-2.5 text-xs font-medium text-slate-800">
+          <h3 class="text-sm font-extrabold text-sky-900 uppercase">🔌 Estado Físico dos Pinos (Arduino Uno + ESP8266)</h3>
+          <ul class="space-y-2 text-xs font-medium text-slate-800">
             <li class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex justify-between">
               <span>• <strong>Pino A0 (TMP36 Vout):</strong></span>
               <span id="pinA0Info" class="font-bold text-sky-800">0.41V → -8,9 °C</span>
@@ -462,17 +475,23 @@
               <span>• <strong>Pino D6 (Piezo Buzzer):</strong></span>
               <span id="pinD6Info" class="font-bold text-amber-700">ATIVO (1500 Hz / 300 ms)</span>
             </li>
+            <li class="p-2.5 rounded-lg bg-sky-50 border border-sky-200 flex justify-between">
+              <span>• <strong>Pinos D10/D11 (Módulo WiFi ESP8266):</strong></span>
+              <span class="font-bold text-emerald-700">TX/RX ATIVO (9600 baud)</span>
+            </li>
           </ul>
         </div>
 
-        <!-- Saída ao Vivo do Monitor Serial (9600 baud) -->
+        <!-- Saída ao Vivo do Monitor Serial + Log Comandos AT WiFi -->
         <div class="bg-white border border-slate-300 rounded-2xl p-6 flex flex-col justify-between space-y-3">
           <div>
-            <h3 class="text-sm font-extrabold text-sky-900 uppercase">📟 Monitor Serial Remoto (9600 baud)</h3>
-            <p class="text-xs text-slate-600">Leitura idêntica à saída <code>Serial.println()</code> validada no Tinkercad</p>
+            <h3 class="text-sm font-extrabold text-sky-900 uppercase">📟 Monitor Serial + Log API WiFi (9600 baud)</h3>
+            <p class="text-xs text-slate-600">Saída idêntica ao Monitor Serial do Tinkercad com Comandos AT e JSON</p>
           </div>
-          <div id="serialMonitorBox" class="h-48 bg-slate-900 text-sky-300 font-mono text-[11px] p-3 rounded-xl overflow-y-auto space-y-1">
-            <div>=== SISTEMA GUARDIAO FRIO IoT INICIADO ===</div>
+          <div id="serialMonitorBox" class="h-56 bg-slate-900 text-sky-300 font-mono text-[11px] p-3 rounded-xl overflow-y-auto space-y-1">
+            <div class="text-emerald-400">=== SISTEMA GUARDIAO FRIO IoT + MODULO WIFI ESP8266 ===</div>
+            <div class="text-slate-400">[WIFI] AT+CWMODE=1 -> OK</div>
+            <div class="text-slate-400">[WIFI] AT+CWJAP="Mercado_Cliente1_WiFi" -> CONECTADO</div>
           </div>
           <button
             onclick="playBuzzerBeep()"
@@ -492,7 +511,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <h2 class="text-base font-extrabold text-sky-900">🔔 CENTRAL DE NOTIFICAÇÕES PUSH & BOT TELEGRAM / WHATSAPP</h2>
-            <p class="text-xs text-slate-600">Histórico em tempo real de disparos enviados ao celular do comerciante e técnico responsável</p>
+            <p class="text-xs text-slate-600">Alertas disparados quando o Módulo WiFi ESP8266 envia <code>"alert": true</code> para a API</p>
           </div>
           <button
             onclick="clearOptionalAlerts()"
@@ -514,13 +533,13 @@
     <section id="tabConfig" class="hidden space-y-5">
       <!-- Aviso RBAC para Proprietário -->
       <div id="rbacNoticeOwner" class="hidden bg-amber-50 border-2 border-amber-500 rounded-2xl p-4 text-xs text-amber-900 font-semibold">
-        🔒 <strong>Controle de Acesso Baseado em Perfil (RBAC):</strong> Você está autenticado como <strong>Proprietário do Mercado (Comerciante)</strong>. A visualização dos parâmetros técnicos está disponível abaixo em modo <strong>Somente Leitura</strong>. Apenas o perfil <strong>Administrador do Sistema (Técnico IoT — wls.lopes@yahoo.com.br)</strong> pode calibrar pinos físicos ou alterar o código de limite térmico do microcontrolador.
+        🔒 <strong>Controle de Acesso Baseado em Perfil (RBAC):</strong> Você está autenticado como <strong>Proprietário do Mercado (mercado.cliente1@gmail.com)</strong>. A visualização dos parâmetros técnicos está disponível abaixo em modo <strong>Somente Leitura</strong>. Apenas o perfil <strong>Administrador do Sistema (admin.tecnico.iot@gmail.com)</strong> pode calibrar pinos físicos ou alterar o limite térmico do microcontrolador.
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <!-- Formulário de Parâmetros do Microcontrolador -->
         <div class="bg-white border border-slate-300 rounded-2xl p-5 shadow-sm space-y-4">
-          <h3 class="text-base font-extrabold text-sky-900">⚙️ Parâmetros Técnicos e Limites ANVISA (ESP8266 / Arduino)</h3>
+          <h3 class="text-base font-extrabold text-sky-900">⚙️ Parâmetros Técnicos e Limites ANVISA (Arduino + ESP8266)</h3>
 
           <div class="space-y-3 text-xs">
             <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-300 space-y-1.5">
@@ -538,16 +557,17 @@
                 <span class="font-bold text-slate-700">°C (Padrão ANVISA: -18 °C a -12 °C)</span>
               </div>
               <p class="text-[11px] text-slate-600">
-                Acima deste valor, o microcontrolador aciona imediatamente o LED Vermelho (D5), o Buzzer (D6) e envia alerta Push.
+                Acima deste valor, o microcontrolador aciona imediatamente o LED Vermelho (D5), o Buzzer (D6) e transmite <code>"alert": true</code> pelo Módulo WiFi ESP8266.
               </p>
             </div>
 
             <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-              <div class="font-bold text-slate-900">Parâmetro 2: Mapeamento de Pinos no Firmware C++</div>
+              <div class="font-bold text-slate-900">Parâmetro 2: Mapeamento de Pinos no Firmware C++ (Tinkercad)</div>
               <div>• Sensor Temperatura (TMP36 / DS18B20): <strong>Pino Analógico A0</strong></div>
               <div>• Sensor Magnético de Porta (Reed Switch): <strong>Pino Digital D2 (INPUT_PULLUP)</strong></div>
               <div>• Indicadores Visuais (Resistor 220 Ω): <strong>LED Verde = D4 | LED Vermelho = D5</strong></div>
               <div>• Alarme Sonoro Local (Piezo 1500 Hz): <strong>Pino Digital PWM D6</strong></div>
+              <div>• Módulo WiFi ESP8266 (SoftwareSerial AT): <strong>RX = Pino D10 | TX = Pino D11 | VCC/CH_PD = 3.3V</strong></div>
             </div>
 
             <button
@@ -555,24 +575,23 @@
               onclick="saveHardwareConfig()"
               class="w-full py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm transition"
             >
-              ✓ Gravar Parâmetros no Microcontrolador
+              ✓ Gravar Parâmetros no Microcontrolador via API
             </button>
           </div>
         </div>
 
         <!-- Perfil do Usuário e Credenciais Cadastradas no RBAC -->
         <div class="bg-white border border-slate-300 rounded-2xl p-5 shadow-sm space-y-4">
-          <h3 class="text-base font-extrabold text-sky-900">👤 Perfil Autenticado & Integração Cloud Auth</h3>
+          <h3 class="text-base font-extrabold text-sky-900">👤 Perfil Autenticado & Credenciais RBAC</h3>
 
           <div id="profileInfoBox" class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
             <!-- Preenchido via JS -->
           </div>
 
           <div class="p-4 rounded-xl bg-sky-50 border border-sky-200 space-y-2 text-xs">
-            <div class="font-bold text-sky-900">🔐 Arquitetura de Autenticação Homologada</div>
-            <p class="text-slate-700">
-              Proteção de rota ativa via token de sessão e verificação criptográfica <strong>SHA-256 (Web Crypto API)</strong>, com suporte nativo a chaves do <strong>Firebase Authentication / Supabase Auth</strong> no arquivo <code>auth-config.js</code>.
-            </p>
+            <div class="font-bold text-sky-900">🔐 Perfis Cadastrados para Homologação</div>
+            <div>• <strong>Admin do Sistema:</strong> <code>admin.tecnico.iot@gmail.com</code> | Senha: <code>@Admin#Sistema2026!</code></div>
+            <div>• <strong>Proprietário (Mercado Cliente 1):</strong> <code>mercado.cliente1@gmail.com</code> | Senha: <code>@Cliente1#Acesso2026!</code></div>
           </div>
         </div>
       </div>
@@ -589,8 +608,8 @@
       <span>02/06. Painel</span>
     </button>
     <button onclick="switchTab('tabTelemetry')" id="mobTab_tabTelemetry" class="flex flex-col items-center text-[11px] font-medium text-slate-600 px-2 py-1 rounded-lg">
-      <span class="text-base">🌡️</span>
-      <span>03. Sensor A0</span>
+      <span class="text-base">📡</span>
+      <span>03. API WiFi</span>
     </button>
     <button onclick="switchTab('tabAlerts')" id="mobTab_tabAlerts" class="flex flex-col items-center text-[11px] font-medium text-slate-600 px-2 py-1 rounded-lg">
       <span class="text-base">🔔</span>
@@ -603,23 +622,21 @@
   </nav>
 
   <!-- ========================================================================
-       LÓGICA DA APLICAÇÃO (AUTENTICAÇÃO RBAC, CHART.JS, TELEMETRIA, CSV E ÁUDIO)
+       LÓGICA DA APLICAÇÃO (AUTENTICAÇÃO RBAC, API WIFI ESP8266, CHART.JS, CSV)
        ======================================================================== -->
   <script type="module">
-    import { DEFAULT_USERS, sha256Hex, EXTERNAL_AUTH_CONFIG } from './auth-config.js';
+    import { DEFAULT_USERS, sha256Hex } from './auth-config.js';
 
-    // Estado Global da Aplicação
     let currentUser = null;
     let limiteTempMaxCongelados = -10.0;
     let audioMuted = false;
     let thermalChartInstance = null;
 
-    // Dados em Tempo Real dos 4 Equipamentos
     const equipments = [
       {
         id: "EQ-01",
         name: "🧊 EQ-01: Freezer Carnes Congeladas",
-        pin: "TMP36 / DS18B20 (A0)",
+        pin: "TMP36 (A0) + WiFi (D10/D11)",
         temp: -16.8,
         limit: -10.0,
         isFrozenType: true,
@@ -628,7 +645,7 @@
       {
         id: "EQ-02",
         name: "🥟 EQ-02: Freezer Polpas e Salgados",
-        pin: "TMP36 / DS18B20 (A0)",
+        pin: "TMP36 (A0) + WiFi (D10/D11)",
         temp: -8.9,
         limit: -10.0,
         isFrozenType: true,
@@ -637,7 +654,7 @@
       {
         id: "EQ-03",
         name: "🧀 EQ-03: Balcão Frios Fatiados",
-        pin: "Sonda DS18B20 (A1)",
+        pin: "DS18B20 (A1) + WiFi",
         temp: 3.4,
         limit: 4.0,
         isFrozenType: false,
@@ -646,7 +663,7 @@
       {
         id: "EQ-04",
         name: "🥛 EQ-04: Expositor de Laticínios",
-        pin: "Sonda DS18B20 (A2)",
+        pin: "DS18B20 (A2) + WiFi",
         temp: 3.8,
         limit: 4.0,
         isFrozenType: false,
@@ -654,43 +671,42 @@
       }
     ];
 
-    // Histórico de Alertas
     const alertsHistory = [
       {
         time: "AGORA (14:30)",
-        title: "🚨 Alerta Limiar Térmico e Porta Aberta (-8,9 °C)",
-        desc: "Freezer 02 ultrapassou o limite de -10,0 °C e está com a porta ABERTA (Pino D2 = HIGH). LED Vermelho (D5) e Buzzer (D6) acionados na loja!",
-        status: "Enviado via WhatsApp/Telegram para Wanderson Lopes e Gerência",
+        title: "🚨 [API WiFi ESP8266] Alerta Limiar e Porta Aberta (-8,9 °C)",
+        desc: "Pacote JSON recebido do Módulo WiFi ESP8266: Freezer 02 atingiu -8,9 °C com porta ABERTA (Pino D2 = HIGH).",
+        status: "Enviado via API HTTP POST para o Painel Web e Celular",
         severity: "CRITICAL"
       },
       {
         time: "Ontem (23:58)",
-        title: "🔥 Teste de Pane Severa no Compressor (+30,2 °C)",
-        desc: "Simulação de falha severa (+30,2 °C | Porta FECHADA) validada no Tinkercad. Alarme disparado em menos de 1 segundo.",
-        status: "Prejuízo evitado estimado: R$ 2.500,00 em carnes congeladas",
+        title: "🔥 [API WiFi ESP8266] Teste de Pane Severa (+30,2 °C)",
+        desc: "Simulação de falha severa (+30,2 °C | Porta FECHADA) validada no Tinkercad e recebida via API.",
+        status: "Prejuízo evitado estimado: R$ 2.500,00 em mercadorias",
         severity: "WARNING"
       },
       {
         time: "Hoje (06:00)",
-        title: "✅ Relatório Automático da Madrugada (-16,8 °C)",
-        desc: "Madrugada 100% estável. Todos os freezers mantiveram congelamento seguro abaixo de -15,0 °C.",
-        status: "Registrado automaticamente na Planilha de Conformidade ANVISA",
+        title: "✅ [API WiFi ESP8266] Relatório da Madrugada (-16,8 °C)",
+        desc: "Madrugada 100% estável no Mercado Cliente 1. Todos os freezers abaixo de -15,0 °C.",
+        status: "Sincronizado automaticamente com a Planilha ANVISA",
         severity: "OK"
       }
     ];
 
     // ========================================================================
-    // 1. AUTENTICAÇÃO E PROTEÇÃO DE ROTA (RBAC)
+    // 1. AUTENTICAÇÃO E PROTEÇÃO DE ROTA (RBAC COM SHA-256)
     // ========================================================================
     window.fillDemoCredentials = function(role) {
       const emailEl = document.getElementById('loginEmail');
       const passEl = document.getElementById('loginPassword');
       if (role === 'ADMIN') {
-        emailEl.value = 'wls.lopes@yahoo.com.br';
-        passEl.value = '@Goku#Vegeta1987';
+        emailEl.value = 'admin.tecnico.iot@gmail.com';
+        passEl.value = '@Admin#Sistema2026!';
       } else {
-        emailEl.value = 'comercial.bompreco.iot@gmail.com';
-        passEl.value = '@BomPreco#Frio2026!';
+        emailEl.value = 'mercado.cliente1@gmail.com';
+        passEl.value = '@Cliente1#Acesso2026!';
       }
       document.getElementById('loginError').classList.add('hidden');
     };
@@ -707,9 +723,14 @@
       const errBox = document.getElementById('loginError');
 
       const inputHash = await sha256Hex(pass);
-      const matchedUser = DEFAULT_USERS.find(
-        u => u.email.toLowerCase() === email && u.passwordHash === inputHash
-      );
+      let matchedUser = null;
+      for (const u of DEFAULT_USERS) {
+        const expectedHash = await sha256Hex(u.expectedPlainForInit);
+        if (u.email.toLowerCase() === email && inputHash === expectedHash) {
+          matchedUser = u;
+          break;
+        }
+      }
 
       if (!matchedUser) {
         errBox.textContent = "❌ Credenciais inválidas! Verifique o e-mail e a senha informados.";
@@ -743,7 +764,6 @@
       document.getElementById('appShell').classList.remove('hidden');
       document.getElementById('mobileBottomNav').classList.remove('hidden');
 
-      // Configura visibilidade RBAC (Admin vs Proprietário)
       const badge = document.getElementById('headerUserBadge');
       const btnSim = document.getElementById('btnOpenSimHeader');
       const rbacNotice = document.getElementById('rbacNoticeOwner');
@@ -752,7 +772,7 @@
 
       if (user.role === 'ADMIN') {
         badge.className = "px-3.5 py-1.5 rounded-full text-xs font-bold bg-sky-100 text-sky-900 border border-sky-400";
-        badge.textContent = `🛠️ Admin Técnico: ${user.name} (RA: ${user.ra})`;
+        badge.textContent = `🛠️ Admin: ${user.email}`;
         btnSim.classList.remove('hidden');
         rbacNotice.classList.add('hidden');
         cfgInput.disabled = false;
@@ -772,7 +792,7 @@
         <div><strong>Nome / Identificação:</strong> ${user.name}</div>
         <div><strong>E-mail Autenticado:</strong> ${user.email}</div>
         <div><strong>Perfil de Acesso (RBAC):</strong> <span class="font-bold text-sky-800">${user.roleBadge}</span></div>
-        <div><strong>Estabelecimento Vinculado:</strong> ${user.store}</div>
+        <div><strong>Unidade Monitorada:</strong> ${user.store}</div>
         <div><strong>Permissão de Calibração Hardware:</strong> ${user.permissions.canEditHardwareParams ? '✅ Total (Leitura e Escrita)' : '🔒 Somente Leitura (Protegido)'}</div>
       `;
 
@@ -781,10 +801,10 @@
     }
 
     // ========================================================================
-    // 2. NAVEGAÇÃO ENTRE ABAS (RESPONSIVA MOBILE & DESKTOP)
+    // 2. NAVEGAÇÃO ENTRE ABAS
     // ========================================================================
     window.switchTab = function(tabId) {
-      if (!currentUser) return; // Guard de rota
+      if (!currentUser) return;
       const tabs = ['tabDashboard', 'tabTelemetry', 'tabAlerts', 'tabConfig'];
       for (const t of tabs) {
         const el = document.getElementById(t);
@@ -807,14 +827,13 @@
     };
 
     // ========================================================================
-    // 3. RENDERIZAÇÃO DE DADOS EM TEMPO REAL (CARDS, TABELA ANVISA, TELEMETRIA)
+    // 3. RENDERIZAÇÃO DE DADOS E PACOTE JSON DA API WIFI ESP8266
     // ========================================================================
     function isEquipmentInAlert(eq) {
       return (eq.temp > eq.limit) || eq.doorOpen;
     }
 
     function renderAllViews() {
-      // Atualiza limite dos congelados
       equipments[0].limit = limiteTempMaxCongelados;
       equipments[1].limit = limiteTempMaxCongelados;
 
@@ -832,7 +851,6 @@
         const tempStr = (eq.temp >= 0 ? '+' : '') + eq.temp.toFixed(1).replace('.', ',') + ' °C';
         const limStr = (eq.limit >= 0 ? '+' : '') + eq.limit.toFixed(1).replace('.', ',') + ' °C';
 
-        // Card de Equipamento
         const card = document.createElement('div');
         card.onclick = () => switchTab('tabTelemetry');
         card.className = inAlert
@@ -853,12 +871,11 @@
             Limite Máx: <strong>${limStr}</strong> | Porta: <strong class="${eq.doorOpen ? 'text-red-700' : 'text-emerald-800'}">${eq.doorOpen ? 'ABERTA (HIGH)!' : 'FECHADA (LOW)'}</strong>
           </div>
           <div class="text-[11px] text-sky-800 font-bold pt-1">
-            Inspecionar telemetria do sensor →
+            Ver pacote JSON WiFi API →
           </div>
         `;
         grid.appendChild(card);
 
-        // Linha da Tabela ANVISA
         const tr = document.createElement('tr');
         tr.className = inAlert ? "bg-red-50/90 text-slate-900" : "bg-white hover:bg-slate-50 text-slate-800";
         tr.innerHTML = `
@@ -873,7 +890,6 @@
         tbody.appendChild(tr);
       }
 
-      // Atualiza KPIs de topo
       const eq2 = equipments[1];
       const eq2Alert = isEquipmentInAlert(eq2);
       const okCount = equipments.length - alertCount;
@@ -895,7 +911,19 @@
         globalBadge.textContent = `🟢 SISTEMA 100% NORMAL`;
       }
 
-      // Atualiza Aba 03 (Telemetria Físico Pinos do EQ-02)
+      // Atualiza Payload JSON recebido da API WiFi ESP8266
+      const apiPayloadObj = {
+        device: "ESP8266-FRIO-01",
+        eq: "EQ-02",
+        tempC: Number(eq2.temp.toFixed(1)),
+        limitC: Number(limiteTempMaxCongelados.toFixed(1)),
+        door: eq2.doorOpen ? "ABERTA" : "FECHADA",
+        alert: eq2Alert
+      };
+      const jsonStr = JSON.stringify(apiPayloadObj);
+      document.getElementById('lastApiJsonBox').textContent = JSON.stringify(apiPayloadObj, null, 2);
+
+      // Atualiza Aba 03
       const hero = document.getElementById('telemetryHeroCard');
       const bigTemp = document.getElementById('telemetryBigTemp');
       const alertTxt = document.getElementById('telemetryAlertText');
@@ -921,15 +949,21 @@
       document.getElementById('pinD5Info').textContent = eq2Alert ? "HIGH (Aceso - Alerta Crítico)" : "LOW (Apagado)";
       document.getElementById('pinD6Info').textContent = eq2Alert ? "ATIVO (tone 1500 Hz)" : "SILENCIOSO (noTone)";
 
-      // Adiciona linha no Monitor Serial
+      // Adiciona linha no Monitor Serial + Pacote API WiFi
       const serialBox = document.getElementById('serialMonitorBox');
-      const line = document.createElement('div');
-      line.textContent = `Temperatura Atual: ${eq2.temp.toFixed(1)} C | Porta: ${eq2.doorOpen ? 'ABERTA' : 'FECHADA'}`;
-      serialBox.appendChild(line);
+      const line1 = document.createElement('div');
+      line1.textContent = `Temperatura Atual: ${eq2.temp.toFixed(1)} C | Porta: ${eq2.doorOpen ? 'ABERTA' : 'FECHADA'}`;
+      serialBox.appendChild(line1);
+
+      const lineApi = document.createElement('div');
+      lineApi.className = "text-emerald-300";
+      lineApi.textContent = `[WIFI API POST /api/telemetry]: ${jsonStr}`;
+      serialBox.appendChild(lineApi);
+
       if (eq2Alert) {
         const al = document.createElement('div');
         al.className = "text-red-400 font-bold";
-        al.textContent = `>>> [ALERTA IoT ENVIADO AO CELULAR]: Verificar Freezer imediatamente!`;
+        al.textContent = `>>> [ALERTA IoT ENVIADO AO SITE E CELULAR]: Verificar Freezer imediatamente!`;
         serialBox.appendChild(al);
       }
       while (serialBox.children.length > 24) serialBox.removeChild(serialBox.firstChild);
@@ -937,6 +971,33 @@
 
       renderAlertsFeed();
     }
+
+    // Processa JSON colado diretamente do Monitor Serial do Tinkercad
+    window.processIncomingApiJson = function() {
+      const raw = document.getElementById('apiJsonInput').value.trim();
+      try {
+        const jsonStart = raw.indexOf('{');
+        const jsonEnd = raw.lastIndexOf('}');
+        const cleanJson = (jsonStart !== -1 && jsonEnd !== -1) ? raw.slice(jsonStart, jsonEnd + 1) : raw;
+        const parsed = JSON.parse(cleanJson);
+
+        if (typeof parsed.tempC === 'number') {
+          equipments[1].temp = parsed.tempC;
+          document.getElementById('simTempSlider').value = parsed.tempC;
+        }
+        if (typeof parsed.door === 'string') {
+          equipments[1].doorOpen = (parsed.door.toUpperCase() === 'ABERTA');
+        }
+        if (typeof parsed.limitC === 'number') {
+          limiteTempMaxCongelados = parsed.limitC;
+        }
+        document.getElementById('lastSyncTime').textContent = `Último pacote WiFi API recebido: ${new Date().toLocaleTimeString('pt-BR')}`;
+        initOrUpdateChart();
+        renderAllViews();
+      } catch (e) {
+        alert("⚠️ Formato JSON inválido! Cole o JSON gerado na linha [WIFI API POST /api/telemetry] do Tinkercad.");
+      }
+    };
 
     function renderAlertsFeed() {
       const container = document.getElementById('alertsFeedContainer');
@@ -1056,18 +1117,18 @@
       equipments[1].doorOpen = !equipments[1].doorOpen;
       const btn = document.getElementById('simDoorBtn');
       if (equipments[1].doorOpen) {
-        btn.className = "w-full py-2.5 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition";
+        btn.className = "w-full py-2 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition";
         btn.textContent = "🚪 PORTA ABERTA (HIGH) — Clique p/ Fechar";
         playBuzzerBeep(250);
         alertsHistory.unshift({
           time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-          title: `🚨 Alerta de Porta Aberta — Freezer 02 (${equipments[1].temp.toFixed(1)} °C)`,
-          desc: "O sensor magnético no Pino D2 detectou abertura da tampa do Freezer 02.",
-          status: "Disparo em tempo real pelo Simulador ESP8266",
+          title: `🚨 [API WiFi ESP8266] Porta Aberta — Freezer 02 (${equipments[1].temp.toFixed(1)} °C)`,
+          desc: "O sensor magnético no Pino D2 enviou alerta via Módulo WiFi ESP8266.",
+          status: "Recebido via HTTP POST /api/telemetry",
           severity: "CRITICAL"
         });
       } else {
-        btn.className = "w-full py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition";
+        btn.className = "w-full py-2 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition";
         btn.textContent = "🔒 PORTA FECHADA (LOW) — Clique p/ Abrir";
       }
       renderAllViews();
@@ -1081,10 +1142,10 @@
 
       const btn = document.getElementById('simDoorBtn');
       if (doorState) {
-        btn.className = "w-full py-2.5 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition";
+        btn.className = "w-full py-2 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition";
         btn.textContent = "🚪 PORTA ABERTA (HIGH) — Clique p/ Fechar";
       } else {
-        btn.className = "w-full py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition";
+        btn.className = "w-full py-2 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition";
         btn.textContent = "🔒 PORTA FECHADA (LOW) — Clique p/ Abrir";
       }
 
@@ -1098,7 +1159,7 @@
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'square';
-        osc.frequency.setValueAtTime(1500, ctx.currentTime); // 1500 Hz igual ao tone(BUZZER, 1500, 300)
+        osc.frequency.setValueAtTime(1500, ctx.currentTime);
         gain.gain.setValueAtTime(0.08, ctx.currentTime);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -1125,11 +1186,11 @@
       document.getElementById('simLimitLabel').textContent = newLim.toFixed(1).replace('.', ',') + ' °C';
       initOrUpdateChart();
       renderAllViews();
-      alert(`✅ Novo limite (${newLim.toFixed(1)} °C) gravado com sucesso nos parâmetros do microcontrolador!`);
+      alert(`✅ Novo limite (${newLim.toFixed(1)} °C) gravado com sucesso no microcontrolador via API!`);
     };
 
     // ========================================================================
-    // 6. EXPORTAÇÃO REAL DA TABELA SANITÁRIA EM CSV (EXCEL / GOOGLE SHEETS)
+    // 6. EXPORTAÇÃO REAL DA TABELA SANITÁRIA EM CSV
     // ========================================================================
     window.exportTableToCSV = function() {
       if (!currentUser) return;
@@ -1144,6 +1205,7 @@
         "Status Alarme Local",
         "Conformidade ANVISA",
         "Data Hora Exportacao",
+        "Unidade Comercial",
         "Responsavel Tecnico"
       ];
 
@@ -1159,6 +1221,7 @@
           alert ? "LED Vermelho D5 + Buzzer D6" : "LED Verde D4 ON",
           alert ? "EM ALERTA CRITICO" : "CONFORME / NORMAL",
           nowStr,
+          "Mercado Cliente 1",
           "Wanderson Lopes da Silva (RA: 314886)"
         ];
       });
@@ -1171,16 +1234,13 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Relatorio_Conformidade_ANVISA_Guardiao_Frio_IoT.csv`;
+      a.download = `Relatorio_Conformidade_ANVISA_Mercado_Cliente1.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     };
 
-    // ========================================================================
-    // RESTAURA SESSÃO SE JÁ AUTENTICADO
-    // ========================================================================
     window.addEventListener('DOMContentLoaded', () => {
       const saved = sessionStorage.getItem('GUARDIAO_FRIO_SESSION');
       if (saved) {
