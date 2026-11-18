@@ -1,6 +1,6 @@
 # ❄️ Guardião Frio IoT — Projeto Interdisciplinar (MEC)
 
-> **Sistema IoT de Baixo Custo (R$ 78,00) para Monitoramento Contínuo de Temperatura (`-18 °C` a `-10 °C`) e Alerta de Abertura de Portas em Pequenos Comércios Comunitários via Módulo Wi-Fi ESP8266 e API JSON**
+> **Sistema IoT de Baixo Custo (R$ 85,00 c/ Módulo Wi-Fi) para Monitoramento Contínuo de Temperatura (`-18 °C` a `-10 °C`) e Alerta de Abertura de Portas em Pequenos Comércios Comunitários via Módulo Wi-Fi ESP8266 e API JSON**
 
 ---
 
