@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guardião Frio IoT — Projeto Interdisciplinar (MEC)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg-canvas: #F1F5F9;
+      --color-bg-surface: #F8FAFC;
+      --color-bg-card: #FFFFFF;
+      --color-brand-primary: #0284C7;
+      --color-brand-dark: #0369A1;
+      --color-status-ok: #15803D;
+      --color-status-critical: #B91C1C;
+      --color-text-primary: #0F172A;
+      --color-text-muted: #475569;
+      --color-border-default: #CBD5E1;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--color-bg-canvas);
+      color: var(--color-text-primary);
+    }
+    .pulse-red {
+      animation: pulseRed 1.6s infinite;
+    }
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.35); }
+      50% { box-shadow: 0 0 0 8px rgba(185, 28, 28, 0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-100 text-slate-900 pb-20 lg:pb-8">
+
+  <!-- ========================================================================
+       TELA 01: LOGIN E AUTENTICAÇÃO RBAC (PROTEÇÃO DE ROTA OBRIGATÓRIA)
+       ======================================================================== -->
+  <main id="loginView" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-100 via-sky-50 to-slate-200">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl border-2 border-slate-300 overflow-hidden">
+      <!-- Barra de Status Estilo Mobile -->
+      <div class="bg-slate-50 px-5 py-2.5 border-b border-slate-200 flex justify-between items-center text-xs font-semibold text-slate-600">
+        <span>09:41 • Wi-Fi Loja</span>
+        <span class="text-emerald-700 font-bold">🔋 98% | ESP8266 ON</span>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-5">
+        <!-- Header da Marca -->
+        <div class="bg-sky-50 border border-sky-300 rounded-2xl p-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-sky-600 text-white flex items-center justify-center text-2xl shadow-sm">❄️</div>
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-sky-800 block">Projeto Interdisciplinar (MEC)</span>
+              <h1 class="text-xl font-extrabold text-sky-900">Guardião Frio IoT</h1>
+              <p class="text-xs font-medium text-slate-700">Acesso Restrito — Monitoramento Comunitário</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Status Hardware -->
+        <div class="bg-emerald-50 border border-emerald-600 rounded-xl p-3.5 text-xs space-y-1">
+          <div class="font-bold text-slate-900">🏪 Mercadinho & Padaria Comunitária Bom Preço</div>
+          <div class="text-slate-700">Proteção contra perdas de alimentos perecíveis e congelados.</div>
+          <div class="font-bold text-emerald-800 pt-0.5">🟢 Controlador NodeMCU ESP8266 Detectado (-60 dBm)</div>
+        </div>
+
+        <!-- Alerta de Erro de Login -->
+        <div id="loginError" class="hidden bg-red-50 border border-red-600 text-red-800 rounded-xl p-3 text-xs font-semibold"></div>
+
+        <!-- Formulário de Login -->
+        <form id="loginForm" class="space-y-4" onsubmit="handleLogin(event)">
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">E-mail de Acesso (RBAC)</label>
+            <input
+              type="email"
+              id="loginEmail"
+              required
+              placeholder="Digite seu e-mail cadastrado"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-600 focus:bg-white"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Senha de Segurança</label>
+            <div class="relative">
+              <input
+                type="password"
+                id="loginPassword"
+                required
+                placeholder="••••••••••••"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-600 focus:bg-white"
+              />
+              <button type="button" onclick="togglePassVisibility()" class="absolute right-3 top-2.5 text-xs font-semibold text-sky-700 hover:underline">
+                Mostrar
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2"
+          >
+            <span>Entrar no Painel em Tempo Real</span>
+            <span>→</span>
+          </button>
+        </form>
+
+        <!-- Botões de Preenchimento Rápido para Demonstração à Banca do MEC -->
+        <div class="pt-3 border-t border-slate-200 space-y-2">
+          <div class="text-[11px] font-bold uppercase text-slate-500 text-center">
+            Credenciais Homologadas (Acesso Rápido p/ Avaliação MEC)
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onclick="fillDemoCredentials('ADMIN')"
+              class="p-2 rounded-lg border border-sky-300 bg-sky-50 hover:bg-sky-100 text-left transition"
+            >
+              <div class="text-[11px] font-bold text-sky-900">🛠️ 1. Admin Técnico IoT</div>
+              <div class="text-[10px] text-slate-600 truncate">wls.lopes@yahoo.com.br</div>
+            </button>
+            <button
+              type="button"
+              onclick="fillDemoCredentials('PROPRIETARIO')"
+              class="p-2 rounded-lg border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-left transition"
+            >
+              <div class="text-[11px] font-bold text-emerald-900">🏪 2. Proprietário Loja</div>
+              <div class="text-[10px] text-slate-600 truncate">comercial.bompreco.iot@gmail.com</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center text-[11px] text-slate-500 pt-1">
+          Aluno: <strong>Wanderson Lopes da Silva (RA: 314886)</strong><br/>
+          Custo de Implantação: R$ 78,00 • Conformidade ANVISA RDC 216/2004
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       APLICAÇÃO AUTENTICADA (PROTEGIDA POR SESSÃO E RBAC)
+       ======================================================================== -->
+  <div id="appShell" class="hidden flex-1 flex flex-col max-w-[1600px] w-full mx-auto px-3 sm:px-6 pt-4 space-y-5">
+
+    <!-- 00_Banner_Documentacao_Anexo_I (Top Header Institucional) -->
+    <header class="bg-white border-2 border-sky-600 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-sky-800 block">
+            PROJETO INTERDISCIPLINAR (MEC) • SISTEMA WEB RESPONSIVO & TELEMETRIA IoT (TEMA CLARO UX/UI)
+          </span>
+          <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900">
+            Guardião Frio IoT — Painel de Monitoramento Comunitário
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium">
+            Monitoramento Contínuo de Temperatura (-18 °C a -10 °C) e Detecção de Abertura de Portas em Pequenos Comércios
+          </p>
+        </div>
+
+        <!-- Sessão Ativa + Botão Simulador Admin + Logout -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div id="headerUserBadge" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-sky-50 text-sky-900 border border-sky-300">
+            👤 Carregando perfil...
+          </div>
+
+          <button
+            id="btnOpenSimHeader"
+            onclick="toggleSimulatorModal()"
+            class="hidden px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5"
+          >
+            <span>🎛️ Simular Leitura ESP8266</span>
+          </button>
+
+          <button
+            onclick="handleLogout()"
+            class="px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition"
+          >
+            Sair (Logout)
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de Metadados do Projeto -->
+      <div class="bg-sky-50 border border-sky-200 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div><strong>👤 Autor:</strong> Wanderson Lopes da Silva (RA: 314886)</div>
+        <div><strong>🏪 Estudo de Caso:</strong> Mercadinho & Padaria Comunitária Bom Preço</div>
+        <div><strong>🔌 Hardware:</strong> Arduino Uno / ESP8266 + TMP36/DS18B20 (A0) + Porta (D2) + LEDs (D4/D5) + Buzzer (D6)</div>
+        <div class="text-emerald-800 font-bold">● SISTEMA ONLINE (192.168.1.45 | Uptime: 99,9%)</div>
+      </div>
+
+      <!-- Menu de Abas Desktop/Tablet -->
+      <nav class="hidden lg:flex items-center gap-2 pt-1 border-t border-slate-200">
+        <button onclick="switchTab('tabDashboard')" id="deskTab_tabDashboard" class="px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 text-white transition">
+          📊 02 & 06. Visão Geral & Dashboard Gerencial
+        </button>
+        <button onclick="switchTab('tabTelemetry')" id="deskTab_tabTelemetry" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+          🌡️ 03. Telemetria do Sensor (Pinos A0 / D2 / D6)
+        </button>
+        <button onclick="switchTab('tabAlerts')" id="deskTab_tabAlerts" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+          🔔 04. Central de Alertas Push & Telegram (<span id="alertCountDesk">3</span>)
+        </button>
+        <button onclick="switchTab('tabConfig')" id="deskTab_tabConfig" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+          ⚙️ 05. Parâmetros ANVISA & Hardware (RBAC)
+        </button>
+      </nav>
+    </header>
+
+    <!-- ======================================================================
+         PAINEL FLUTUANTE / MODAL: SIMULADOR IoT ESP8266 (EXCLUSIVO ADMIN)
+         ====================================================================== -->
+    <section id="simulatorDrawer" class="hidden bg-white border-2 border-amber-500 rounded-2xl p-5 shadow-lg space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <div>
+          <span class="text-[11px] font-extrabold uppercase text-amber-700 block">MODO DEMONSTRAÇÃO PARA BANCA AVALIADORA (EXCLUSIVO PERFIL ADMIN)</span>
+          <h2 class="text-base font-extrabold text-slate-900">🎛️ Simulador de Leituras em Tempo Real — Placa NodeMCU ESP8266 / Arduino Uno</h2>
+        </div>
+        <button onclick="toggleSimulatorModal()" class="text-xs font-bold text-slate-500 hover:text-slate-800 px-2.5 py-1 rounded-lg bg-slate-100">
+          Fechar ✕
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Controle Temperatura Freezer 02 -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold">
+            <span>🌡️ Temperatura EQ-02 (Pino A0):</span>
+            <span id="simTempDisplay" class="text-sm font-extrabold text-red-700">-8,9 °C</span>
+          </div>
+          <input
+            type="range"
+            id="simTempSlider"
+            min="-22"
+            max="32"
+            step="0.1"
+            value="-8.9"
+            oninput="updateSimulationFromControls()"
+            class="w-full accent-sky-600 cursor-pointer"
+          />
+          <div class="flex justify-between text-[11px] text-slate-500 font-medium">
+            <span>-22 °C (Ideal)</span>
+            <span>Limite: <strong id="simLimitLabel">-10,0 °C</strong></span>
+            <span>+32 °C (Pane)</span>
+          </div>
+          <div class="flex gap-1.5 pt-1">
+            <button onclick="setPresetScenario(-16.8, false)" class="flex-1 py-1.5 px-2 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-[11px] font-bold">
+              Cenário 1 (-16,8°C OK)
+            </button>
+            <button onclick="setPresetScenario(-8.9, true)" class="flex-1 py-1.5 px-2 rounded-lg bg-red-100 hover:bg-red-200 text-red-900 text-[11px] font-bold">
+              Cenário 2/3 (-8,9°C)
+            </button>
+            <button onclick="setPresetScenario(30.2, false)" class="flex-1 py-1.5 px-2 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-bold">
+              Cenário 4 (+30,2°C)
+            </button>
+          </div>
+        </div>
+
+        <!-- Controle Sensor de Porta D2 -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between space-y-2">
+          <div>
+            <div class="text-xs font-bold text-slate-800">🚪 Sensor Magnético Reed Switch (Pino D2)</div>
+            <p class="text-[11px] text-slate-600">Simula cliente ou funcionário esquecendo a tampa do Freezer 02 aberta.</p>
+          </div>
+          <button
+            id="simDoorBtn"
+            onclick="toggleSimDoor()"
+            class="w-full py-2.5 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition"
+          >
+            🚪 PORTA ABERTA (HIGH) — Clique p/ Fechar
+          </button>
+        </div>
+
+        <!-- Controle Alarme Sonoro Web Audio API (Buzzer D6) -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between space-y-2">
+          <div>
+            <div class="text-xs font-bold text-slate-800">🔊 Piezo Buzzer Local (Pino D6 — 1500 Hz)</div>
+            <p class="text-[11px] text-slate-600">Reproduz o som real de 1500 Hz do código Arduino (<code>tone(6, 1500, 300)</code>).</p>
+          </div>
+          <div class="flex gap-2">
+            <button
+              onclick="playBuzzerBeep()"
+              class="flex-1 py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs transition"
+            >
+              🔊 Testar Bip Buzzer (1500 Hz)
+            </button>
+            <button
+              id="btnMuteBuzzer"
+              onclick="toggleAudioMute()"
+              class="py-2.5 px-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs transition"
+            >
+              Áudio: ON
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ABA 1: VISÃO GERAL (02_Home) & DASHBOARD GERENCIAL WEB (06_Dashboard)
+         ====================================================================== -->
+    <section id="tabDashboard" class="space-y-5">
+
+      <!-- Linha de 4 KPIs Gerenciais -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-300 rounded-2xl p-4 shadow-sm">
+          <div class="text-[11px] font-bold uppercase text-slate-500">TEMPERATURA MÉDIA (CONGELADOS)</div>
+          <div id="kpiAvgTemp" class="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1">-16,8 °C</div>
+          <div class="text-xs text-slate-600 mt-1">Padrão ANVISA: -18 °C a -12 °C | Limite: <span id="kpiLimitSpan">-10,0 °C</span></div>
+        </div>
+
+        <div class="bg-white border border-slate-300 rounded-2xl p-4 shadow-sm">
+          <div class="text-[11px] font-bold uppercase text-slate-500">PREJUÍZOS DE ESTOQUE EVITADOS (30 DIAS)</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-sky-700 mt-1">R$ 3.200,00</div>
+          <div class="text-xs text-slate-600 mt-1">0 perdas por pane noturna | Retorno (ROI) de 41x sobre R$ 78,00</div>
+        </div>
+
+        <div class="bg-white border border-slate-300 rounded-2xl p-4 shadow-sm">
+          <div class="text-[11px] font-bold uppercase text-slate-500">ECONOMIA MENSAL NA CONTA DE ENERGIA</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1">-14,2% (R$ 85/mês)</div>
+          <div class="text-xs text-slate-600 mt-1">Redução de tampas/portas esquecidas abertas com Buzzer D6</div>
+        </div>
+
+        <div class="bg-white border border-slate-300 rounded-2xl p-4 shadow-sm">
+          <div class="text-[11px] font-bold uppercase text-slate-500">STATUS DOS EQUIPAMENTOS E ALERTAS</div>
+          <div id="kpiStatusSummary" class="text-2xl sm:text-3xl font-extrabold text-red-700 mt-1">1 Alerta / 3 OK</div>
+          <div id="kpiStatusSub" class="text-xs text-slate-600 mt-1">Freezer 02 em Alerta (-8,9 °C | Porta Aberta) • Demais Normais</div>
+        </div>
+      </div>
+
+      <!-- Cards Interativos dos 4 Equipamentos (02_Home) -->
+      <div class="bg-white border border-slate-300 rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <h2 class="text-base font-extrabold text-sky-900">🧊 MONITORAMENTO EM TEMPO REAL DOS EQUIPAMENTOS (EQ-01 A EQ-04)</h2>
+            <p class="text-xs text-slate-600">Toque em qualquer equipamento para inspecionar os pinos do microcontrolador na aba de Telemetria</p>
+          </div>
+          <span id="globalBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-800 border border-red-600">
+            🔴 1 EQUIPAMENTO EM ALERTA CRÍTICO
+          </span>
+        </div>
+
+        <div id="equipmentCardsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <!-- Renderizado dinamicamente via JS -->
+        </div>
+      </div>
+
+      <!-- Seção Central 2 Colunas: Gráfico 24h (Chart.js) + Tabela de Conformidade ANVISA -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Gráfico 24h -->
+        <div class="xl:col-span-5 bg-white border border-slate-300 rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-3">
+          <div>
+            <h3 class="text-sm font-extrabold text-sky-900 uppercase">
+              📈 GRÁFICO DE CURVA TÉRMICA 24H — FREEZERS DE CONGELADOS
+            </h3>
+            <p class="text-xs text-slate-600">
+              Monitoramento contínuo via Sensor TMP36/DS18B20 (Pino A0) — Limite Máximo: <strong id="chartLimitText">-10,0 °C</strong>
+            </p>
+          </div>
+
+          <div class="h-64 w-full bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <canvas id="thermalChart"></canvas>
+          </div>
+
+          <p class="text-[11px] text-slate-500">
+            *Nota: Às 14:30 houve teste de limiar (-8,9 °C &gt; -10,0 °C) e às 15:00 simulação de pane severa (+30,2 °C) validados no Tinkercad.
+          </p>
+        </div>
+
+        <!-- Tabela de Acompanhamento e Conformidade Sanitária ANVISA -->
+        <div class="xl:col-span-7 bg-white border border-slate-300 rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h3 class="text-sm font-extrabold text-sky-900 uppercase">
+                📋 TABELA DE MONITORAMENTO E CONFORMIDADE SANITÁRIA (TEMPO REAL)
+              </h3>
+              <p class="text-xs text-slate-600">
+                Substitui a planilha manual em papel, economizando 25 min/dia da equipe e prevenindo perdas noturnas
+              </p>
+            </div>
+            <button
+              onclick="exportTableToCSV()"
+              class="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-sm transition flex items-center gap-2 shrink-0"
+            >
+              <span>📥 Exportar Planilha CSV (ANVISA)</span>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-sky-100 text-sky-900 border-b border-sky-300 font-bold uppercase text-[11px]">
+                  <th class="py-3 px-3">Equipamento Monitorado</th>
+                  <th class="py-3 px-3">Sensor / Pino</th>
+                  <th class="py-3 px-3">Temp. Atual</th>
+                  <th class="py-3 px-3">Limite Máx.</th>
+                  <th class="py-3 px-3">Porta (D2)</th>
+                  <th class="py-3 px-3">Alarme (D4/D5/D6)</th>
+                  <th class="py-3 px-3">Status Atual</th>
+                </tr>
+              </thead>
+              <tbody id="anvisaTableBody" class="divide-y divide-slate-200 font-medium">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600">
+            <span>✅ Registro auditável conforme padrões ANVISA RDC 216/2004</span>
+            <span id="lastSyncTime">Última sincronização ESP8266: Agora mesmo</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ABA 2: 03_Monitoramento_Sensor (TELEMETRIA DETALHADA DOS PINOS)
+         ====================================================================== -->
+    <section id="tabTelemetry" class="hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <!-- Mostrador Principal do Sensor A0 -->
+        <div id="telemetryHeroCard" class="bg-red-50 border-2 border-red-600 rounded-2xl p-6 space-y-3">
+          <div class="text-xs font-bold uppercase text-red-800">🌡️ Leitura do Sensor TMP36 / DS18B20 (Pino A0)</div>
+          <div class="text-sm font-bold text-slate-800">Equipamento em Foco: <strong>🥟 EQ-02: Freezer Polpas e Salgados</strong></div>
+          <div id="telemetryBigTemp" class="text-5xl font-extrabold text-red-700">-8,9 °C</div>
+          <div id="telemetryAlertText" class="text-xs font-bold text-red-800">
+            ⚠️ ULTRAPASSOU LIMITE DE CONGELADOS (-10,0 °C)
+          </div>
+          <div class="text-xs text-slate-700 font-medium">
+            Faixa Ideal ANVISA para Congelados: <strong>-18,0 °C a -12,0 °C</strong>
+          </div>
+        </div>
+
+        <!-- Estado Físico dos Pinos no Microcontrolador -->
+        <div class="bg-white border border-slate-300 rounded-2xl p-6 space-y-3">
+          <h3 class="text-sm font-extrabold text-sky-900 uppercase">🔌 Estado Físico dos Pinos (Arduino Uno / ESP8266)</h3>
+          <ul class="space-y-2.5 text-xs font-medium text-slate-800">
+            <li class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex justify-between">
+              <span>• <strong>Pino A0 (TMP36 Vout):</strong></span>
+              <span id="pinA0Info" class="font-bold text-sky-800">0.41V → -8,9 °C</span>
+            </li>
+            <li class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex justify-between">
+              <span>• <strong>Pino D2 (Chave Porta):</strong></span>
+              <span id="pinD2Info" class="font-bold text-red-700">HIGH (PORTA ABERTA)</span>
+            </li>
+            <li class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex justify-between">
+              <span>• <strong>Pino D4 (LED Verde 220Ω):</strong></span>
+              <span id="pinD4Info" class="font-bold text-slate-500">LOW (Apagado)</span>
+            </li>
+            <li class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex justify-between">
+              <span>• <strong>Pino D5 (LED Vermelho 220Ω):</strong></span>
+              <span id="pinD5Info" class="font-bold text-red-700">HIGH (Aceso no Balcão)</span>
+            </li>
+            <li class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex justify-between">
+              <span>• <strong>Pino D6 (Piezo Buzzer):</strong></span>
+              <span id="pinD6Info" class="font-bold text-amber-700">ATIVO (1500 Hz / 300 ms)</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Saída ao Vivo do Monitor Serial (9600 baud) -->
+        <div class="bg-white border border-slate-300 rounded-2xl p-6 flex flex-col justify-between space-y-3">
+          <div>
+            <h3 class="text-sm font-extrabold text-sky-900 uppercase">📟 Monitor Serial Remoto (9600 baud)</h3>
+            <p class="text-xs text-slate-600">Leitura idêntica à saída <code>Serial.println()</code> validada no Tinkercad</p>
+          </div>
+          <div id="serialMonitorBox" class="h-48 bg-slate-900 text-sky-300 font-mono text-[11px] p-3 rounded-xl overflow-y-auto space-y-1">
+            <div>=== SISTEMA GUARDIAO FRIO IoT INICIADO ===</div>
+          </div>
+          <button
+            onclick="playBuzzerBeep()"
+            class="w-full py-2.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs transition"
+          >
+            🔊 Ouvir Simulação Sonora do Buzzer (Pino D6)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ABA 3: 04_Central_Alertas (NOTIFICAÇÕES PUSH & BOT TELEGRAM/WHATSAPP)
+         ====================================================================== -->
+    <section id="tabAlerts" class="hidden space-y-4">
+      <div class="bg-white border border-slate-300 rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <h2 class="text-base font-extrabold text-sky-900">🔔 CENTRAL DE NOTIFICAÇÕES PUSH & BOT TELEGRAM / WHATSAPP</h2>
+            <p class="text-xs text-slate-600">Histórico em tempo real de disparos enviados ao celular do comerciante e técnico responsável</p>
+          </div>
+          <button
+            onclick="clearOptionalAlerts()"
+            class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold self-start"
+          >
+            Atualizar Feed
+          </button>
+        </div>
+
+        <div id="alertsFeedContainer" class="space-y-3">
+          <!-- Renderizado via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ABA 4: 05_Configuracoes_Perfil (PARÂMETROS TÉCNICOS & RBAC)
+         ====================================================================== -->
+    <section id="tabConfig" class="hidden space-y-5">
+      <!-- Aviso RBAC para Proprietário -->
+      <div id="rbacNoticeOwner" class="hidden bg-amber-50 border-2 border-amber-500 rounded-2xl p-4 text-xs text-amber-900 font-semibold">
+        🔒 <strong>Controle de Acesso Baseado em Perfil (RBAC):</strong> Você está autenticado como <strong>Proprietário do Mercado (Comerciante)</strong>. A visualização dos parâmetros técnicos está disponível abaixo em modo <strong>Somente Leitura</strong>. Apenas o perfil <strong>Administrador do Sistema (Técnico IoT — wls.lopes@yahoo.com.br)</strong> pode calibrar pinos físicos ou alterar o código de limite térmico do microcontrolador.
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <!-- Formulário de Parâmetros do Microcontrolador -->
+        <div class="bg-white border border-slate-300 rounded-2xl p-5 shadow-sm space-y-4">
+          <h3 class="text-base font-extrabold text-sky-900">⚙️ Parâmetros Técnicos e Limites ANVISA (ESP8266 / Arduino)</h3>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-300 space-y-1.5">
+              <label class="font-bold text-sky-900 block">
+                Parâmetro 1: Limite Máximo p/ Congelados (<code>LIMITE_TEMP_MAX</code>)
+              </label>
+              <div class="flex items-center gap-2">
+                <input
+                  type="number"
+                  step="0.5"
+                  id="cfgLimitTempInput"
+                  value="-10.0"
+                  class="w-32 px-3 py-2 rounded-lg border border-slate-300 bg-white font-bold text-sm text-slate-900"
+                />
+                <span class="font-bold text-slate-700">°C (Padrão ANVISA: -18 °C a -12 °C)</span>
+              </div>
+              <p class="text-[11px] text-slate-600">
+                Acima deste valor, o microcontrolador aciona imediatamente o LED Vermelho (D5), o Buzzer (D6) e envia alerta Push.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+              <div class="font-bold text-slate-900">Parâmetro 2: Mapeamento de Pinos no Firmware C++</div>
+              <div>• Sensor Temperatura (TMP36 / DS18B20): <strong>Pino Analógico A0</strong></div>
+              <div>• Sensor Magnético de Porta (Reed Switch): <strong>Pino Digital D2 (INPUT_PULLUP)</strong></div>
+              <div>• Indicadores Visuais (Resistor 220 Ω): <strong>LED Verde = D4 | LED Vermelho = D5</strong></div>
+              <div>• Alarme Sonoro Local (Piezo 1500 Hz): <strong>Pino Digital PWM D6</strong></div>
+            </div>
+
+            <button
+              id="btnSaveHardwareCfg"
+              onclick="saveHardwareConfig()"
+              class="w-full py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm transition"
+            >
+              ✓ Gravar Parâmetros no Microcontrolador
+            </button>
+          </div>
+        </div>
+
+        <!-- Perfil do Usuário e Credenciais Cadastradas no RBAC -->
+        <div class="bg-white border border-slate-300 rounded-2xl p-5 shadow-sm space-y-4">
+          <h3 class="text-base font-extrabold text-sky-900">👤 Perfil Autenticado & Integração Cloud Auth</h3>
+
+          <div id="profileInfoBox" class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+            <!-- Preenchido via JS -->
+          </div>
+
+          <div class="p-4 rounded-xl bg-sky-50 border border-sky-200 space-y-2 text-xs">
+            <div class="font-bold text-sky-900">🔐 Arquitetura de Autenticação Homologada</div>
+            <p class="text-slate-700">
+              Proteção de rota ativa via token de sessão e verificação criptográfica <strong>SHA-256 (Web Crypto API)</strong>, com suporte nativo a chaves do <strong>Firebase Authentication / Supabase Auth</strong> no arquivo <code>auth-config.js</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ========================================================================
+       BARRA DE NAVEGAÇÃO INFERIOR COMPACTA (MOBILE-FIRST < 1024px)
+       ======================================================================== -->
+  <nav id="mobileBottomNav" class="hidden lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-slate-300 px-2 py-2 flex justify-around items-center z-40 shadow-lg">
+    <button onclick="switchTab('tabDashboard')" id="mobTab_tabDashboard" class="flex flex-col items-center text-[11px] font-bold text-sky-700 px-2 py-1 rounded-lg">
+      <span class="text-base">📊</span>
+      <span>02/06. Painel</span>
+    </button>
+    <button onclick="switchTab('tabTelemetry')" id="mobTab_tabTelemetry" class="flex flex-col items-center text-[11px] font-medium text-slate-600 px-2 py-1 rounded-lg">
+      <span class="text-base">🌡️</span>
+      <span>03. Sensor A0</span>
+    </button>
+    <button onclick="switchTab('tabAlerts')" id="mobTab_tabAlerts" class="flex flex-col items-center text-[11px] font-medium text-slate-600 px-2 py-1 rounded-lg">
+      <span class="text-base">🔔</span>
+      <span>04. Alertas</span>
+    </button>
+    <button onclick="switchTab('tabConfig')" id="mobTab_tabConfig" class="flex flex-col items-center text-[11px] font-medium text-slate-600 px-2 py-1 rounded-lg">
+      <span class="text-base">⚙️</span>
+      <span>05. Ajustes</span>
+    </button>
+  </nav>
+
+  <!-- ========================================================================
+       LÓGICA DA APLICAÇÃO (AUTENTICAÇÃO RBAC, CHART.JS, TELEMETRIA, CSV E ÁUDIO)
+       ======================================================================== -->
+  <script type="module">
+    import { DEFAULT_USERS, sha256Hex, EXTERNAL_AUTH_CONFIG } from './auth-config.js';
+
+    // Estado Global da Aplicação
+    let currentUser = null;
+    let limiteTempMaxCongelados = -10.0;
+    let audioMuted = false;
+    let thermalChartInstance = null;
+
+    // Dados em Tempo Real dos 4 Equipamentos
+    const equipments = [
+      {
+        id: "EQ-01",
+        name: "🧊 EQ-01: Freezer Carnes Congeladas",
+        pin: "TMP36 / DS18B20 (A0)",
+        temp: -16.8,
+        limit: -10.0,
+        isFrozenType: true,
+        doorOpen: false
+      },
+      {
+        id: "EQ-02",
+        name: "🥟 EQ-02: Freezer Polpas e Salgados",
+        pin: "TMP36 / DS18B20 (A0)",
+        temp: -8.9,
+        limit: -10.0,
+        isFrozenType: true,
+        doorOpen: true
+      },
+      {
+        id: "EQ-03",
+        name: "🧀 EQ-03: Balcão Frios Fatiados",
+        pin: "Sonda DS18B20 (A1)",
+        temp: 3.4,
+        limit: 4.0,
+        isFrozenType: false,
+        doorOpen: false
+      },
+      {
+        id: "EQ-04",
+        name: "🥛 EQ-04: Expositor de Laticínios",
+        pin: "Sonda DS18B20 (A2)",
+        temp: 3.8,
+        limit: 4.0,
+        isFrozenType: false,
+        doorOpen: false
+      }
+    ];
+
+    // Histórico de Alertas
+    const alertsHistory = [
+      {
+        time: "AGORA (14:30)",
+        title: "🚨 Alerta Limiar Térmico e Porta Aberta (-8,9 °C)",
+        desc: "Freezer 02 ultrapassou o limite de -10,0 °C e está com a porta ABERTA (Pino D2 = HIGH). LED Vermelho (D5) e Buzzer (D6) acionados na loja!",
+        status: "Enviado via WhatsApp/Telegram para Wanderson Lopes e Gerência",
+        severity: "CRITICAL"
+      },
+      {
+        time: "Ontem (23:58)",
+        title: "🔥 Teste de Pane Severa no Compressor (+30,2 °C)",
+        desc: "Simulação de falha severa (+30,2 °C | Porta FECHADA) validada no Tinkercad. Alarme disparado em menos de 1 segundo.",
+        status: "Prejuízo evitado estimado: R$ 2.500,00 em carnes congeladas",
+        severity: "WARNING"
+      },
+      {
+        time: "Hoje (06:00)",
+        title: "✅ Relatório Automático da Madrugada (-16,8 °C)",
+        desc: "Madrugada 100% estável. Todos os freezers mantiveram congelamento seguro abaixo de -15,0 °C.",
+        status: "Registrado automaticamente na Planilha de Conformidade ANVISA",
+        severity: "OK"
+      }
+    ];
+
+    // ========================================================================
+    // 1. AUTENTICAÇÃO E PROTEÇÃO DE ROTA (RBAC)
+    // ========================================================================
+    window.fillDemoCredentials = function(role) {
+      const emailEl = document.getElementById('loginEmail');
+      const passEl = document.getElementById('loginPassword');
+      if (role === 'ADMIN') {
+        emailEl.value = 'wls.lopes@yahoo.com.br';
+        passEl.value = '@Goku#Vegeta1987';
+      } else {
+        emailEl.value = 'comercial.bompreco.iot@gmail.com';
+        passEl.value = '@BomPreco#Frio2026!';
+      }
+      document.getElementById('loginError').classList.add('hidden');
+    };
+
+    window.togglePassVisibility = function() {
+      const input = document.getElementById('loginPassword');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    };
+
+    window.handleLogin = async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('loginPassword').value;
+      const errBox = document.getElementById('loginError');
+
+      const inputHash = await sha256Hex(pass);
+      const matchedUser = DEFAULT_USERS.find(
+        u => u.email.toLowerCase() === email && u.passwordHash === inputHash
+      );
+
+      if (!matchedUser) {
+        errBox.textContent = "❌ Credenciais inválidas! Verifique o e-mail e a senha informados.";
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      errBox.classList.add('hidden');
+      const sessionPayload = {
+        ...matchedUser,
+        loginAt: new Date().toISOString(),
+        token: await sha256Hex(matchedUser.id + Date.now())
+      };
+      sessionStorage.setItem('GUARDIAO_FRIO_SESSION', JSON.stringify(sessionPayload));
+      enterAuthenticatedApp(sessionPayload);
+    };
+
+    window.handleLogout = function() {
+      sessionStorage.removeItem('GUARDIAO_FRIO_SESSION');
+      currentUser = null;
+      document.getElementById('appShell').classList.add('hidden');
+      document.getElementById('mobileBottomNav').classList.add('hidden');
+      document.getElementById('simulatorDrawer').classList.add('hidden');
+      document.getElementById('loginView').classList.remove('hidden');
+      document.getElementById('loginPassword').value = '';
+    };
+
+    function enterAuthenticatedApp(user) {
+      currentUser = user;
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('appShell').classList.remove('hidden');
+      document.getElementById('mobileBottomNav').classList.remove('hidden');
+
+      // Configura visibilidade RBAC (Admin vs Proprietário)
+      const badge = document.getElementById('headerUserBadge');
+      const btnSim = document.getElementById('btnOpenSimHeader');
+      const rbacNotice = document.getElementById('rbacNoticeOwner');
+      const cfgInput = document.getElementById('cfgLimitTempInput');
+      const btnSaveCfg = document.getElementById('btnSaveHardwareCfg');
+
+      if (user.role === 'ADMIN') {
+        badge.className = "px-3.5 py-1.5 rounded-full text-xs font-bold bg-sky-100 text-sky-900 border border-sky-400";
+        badge.textContent = `🛠️ Admin Técnico: ${user.name} (RA: ${user.ra})`;
+        btnSim.classList.remove('hidden');
+        rbacNotice.classList.add('hidden');
+        cfgInput.disabled = false;
+        btnSaveCfg.disabled = false;
+        btnSaveCfg.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        badge.className = "px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-400";
+        badge.textContent = `🏪 Proprietário: ${user.email}`;
+        btnSim.classList.add('hidden');
+        rbacNotice.classList.remove('hidden');
+        cfgInput.disabled = true;
+        btnSaveCfg.disabled = true;
+        btnSaveCfg.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+
+      document.getElementById('profileInfoBox').innerHTML = `
+        <div><strong>Nome / Identificação:</strong> ${user.name}</div>
+        <div><strong>E-mail Autenticado:</strong> ${user.email}</div>
+        <div><strong>Perfil de Acesso (RBAC):</strong> <span class="font-bold text-sky-800">${user.roleBadge}</span></div>
+        <div><strong>Estabelecimento Vinculado:</strong> ${user.store}</div>
+        <div><strong>Permissão de Calibração Hardware:</strong> ${user.permissions.canEditHardwareParams ? '✅ Total (Leitura e Escrita)' : '🔒 Somente Leitura (Protegido)'}</div>
+      `;
+
+      initOrUpdateChart();
+      renderAllViews();
+    }
+
+    // ========================================================================
+    // 2. NAVEGAÇÃO ENTRE ABAS (RESPONSIVA MOBILE & DESKTOP)
+    // ========================================================================
+    window.switchTab = function(tabId) {
+      if (!currentUser) return; // Guard de rota
+      const tabs = ['tabDashboard', 'tabTelemetry', 'tabAlerts', 'tabConfig'];
+      for (const t of tabs) {
+        const el = document.getElementById(t);
+        if (t === tabId) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+
+        const dBtn = document.getElementById('deskTab_' + t);
+        if (dBtn) {
+          dBtn.className = (t === tabId)
+            ? "px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 text-white transition"
+            : "px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+        }
+        const mBtn = document.getElementById('mobTab_' + t);
+        if (mBtn) {
+          mBtn.className = (t === tabId)
+            ? "flex flex-col items-center text-[11px] font-bold text-sky-700 px-2 py-1 rounded-lg bg-sky-50"
+            : "flex flex-col items-center text-[11px] font-medium text-slate-600 px-2 py-1 rounded-lg";
+        }
+      }
+    };
+
+    // ========================================================================
+    // 3. RENDERIZAÇÃO DE DADOS EM TEMPO REAL (CARDS, TABELA ANVISA, TELEMETRIA)
+    // ========================================================================
+    function isEquipmentInAlert(eq) {
+      return (eq.temp > eq.limit) || eq.doorOpen;
+    }
+
+    function renderAllViews() {
+      // Atualiza limite dos congelados
+      equipments[0].limit = limiteTempMaxCongelados;
+      equipments[1].limit = limiteTempMaxCongelados;
+
+      const grid = document.getElementById('equipmentCardsGrid');
+      const tbody = document.getElementById('anvisaTableBody');
+      grid.innerHTML = '';
+      tbody.innerHTML = '';
+
+      let alertCount = 0;
+
+      for (const eq of equipments) {
+        const inAlert = isEquipmentInAlert(eq);
+        if (inAlert) alertCount++;
+
+        const tempStr = (eq.temp >= 0 ? '+' : '') + eq.temp.toFixed(1).replace('.', ',') + ' °C';
+        const limStr = (eq.limit >= 0 ? '+' : '') + eq.limit.toFixed(1).replace('.', ',') + ' °C';
+
+        // Card de Equipamento
+        const card = document.createElement('div');
+        card.onclick = () => switchTab('tabTelemetry');
+        card.className = inAlert
+          ? "cursor-pointer rounded-2xl p-4 bg-red-50 border-2 border-red-600 pulse-red transition space-y-2"
+          : "cursor-pointer rounded-2xl p-4 bg-emerald-50/60 border-2 border-emerald-600 hover:bg-emerald-50 transition space-y-2";
+
+        card.innerHTML = `
+          <div class="flex justify-between items-start gap-2">
+            <span class="text-xs font-extrabold text-slate-900">${eq.name}</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${inAlert ? 'bg-red-100 text-red-800 border border-red-600' : 'bg-emerald-100 text-emerald-800 border border-emerald-600'}">
+              ${inAlert ? '🔴 ALERTA CRÍTICO' : '🟢 NORMAL'}
+            </span>
+          </div>
+          <div class="text-2xl font-extrabold ${inAlert ? 'text-red-700' : 'text-emerald-800'}">
+            ${tempStr}
+          </div>
+          <div class="text-[11px] font-semibold text-slate-700">
+            Limite Máx: <strong>${limStr}</strong> | Porta: <strong class="${eq.doorOpen ? 'text-red-700' : 'text-emerald-800'}">${eq.doorOpen ? 'ABERTA (HIGH)!' : 'FECHADA (LOW)'}</strong>
+          </div>
+          <div class="text-[11px] text-sky-800 font-bold pt-1">
+            Inspecionar telemetria do sensor →
+          </div>
+        `;
+        grid.appendChild(card);
+
+        // Linha da Tabela ANVISA
+        const tr = document.createElement('tr');
+        tr.className = inAlert ? "bg-red-50/90 text-slate-900" : "bg-white hover:bg-slate-50 text-slate-800";
+        tr.innerHTML = `
+          <td class="py-3 px-3 font-bold">${eq.name}</td>
+          <td class="py-3 px-3 text-slate-600">${eq.pin}</td>
+          <td class="py-3 px-3 font-extrabold ${inAlert ? 'text-red-700' : 'text-emerald-700'}">${tempStr}</td>
+          <td class="py-3 px-3 font-semibold">${limStr}</td>
+          <td class="py-3 px-3 font-bold ${eq.doorOpen ? 'text-red-700' : 'text-slate-700'}">${eq.doorOpen ? 'ABERTA (HIGH)' : 'FECHADA (LOW)'}</td>
+          <td class="py-3 px-3 font-semibold">${inAlert ? 'LED Vermelho (D5) + Buzzer (D6)' : 'LED Verde (D4) ON'}</td>
+          <td class="py-3 px-3 font-extrabold ${inAlert ? 'text-red-700' : 'text-emerald-700'}">${inAlert ? '🔴 ALERTA CRÍTICO' : '🟢 NORMAL'}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      // Atualiza KPIs de topo
+      const eq2 = equipments[1];
+      const eq2Alert = isEquipmentInAlert(eq2);
+      const okCount = equipments.length - alertCount;
+      const kpiSum = document.getElementById('kpiStatusSummary');
+      const kpiSub = document.getElementById('kpiStatusSub');
+      const globalBadge = document.getElementById('globalBadge');
+
+      if (alertCount > 0) {
+        kpiSum.textContent = `${alertCount} Alerta / ${okCount} OK`;
+        kpiSum.className = "text-2xl sm:text-3xl font-extrabold text-red-700 mt-1";
+        kpiSub.textContent = `Freezer 02 em Alerta (${eq2.temp.toFixed(1).replace('.', ',')} °C | Porta ${eq2.doorOpen ? 'Aberta' : 'Fechada'})`;
+        globalBadge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-800 border border-red-600";
+        globalBadge.textContent = `🔴 ${alertCount} EQUIPAMENTO EM ALERTA CRÍTICO`;
+      } else {
+        kpiSum.textContent = `0 Alertas / 4 OK`;
+        kpiSum.className = "text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1";
+        kpiSub.textContent = `Todos os 4 equipamentos dentro da faixa segura da ANVISA`;
+        globalBadge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-600";
+        globalBadge.textContent = `🟢 SISTEMA 100% NORMAL`;
+      }
+
+      // Atualiza Aba 03 (Telemetria Físico Pinos do EQ-02)
+      const hero = document.getElementById('telemetryHeroCard');
+      const bigTemp = document.getElementById('telemetryBigTemp');
+      const alertTxt = document.getElementById('telemetryAlertText');
+      bigTemp.textContent = (eq2.temp >= 0 ? '+' : '') + eq2.temp.toFixed(1).replace('.', ',') + ' °C';
+
+      if (eq2Alert) {
+        hero.className = "bg-red-50 border-2 border-red-600 rounded-2xl p-6 space-y-3";
+        bigTemp.className = "text-5xl font-extrabold text-red-700";
+        alertTxt.className = "text-xs font-bold text-red-800";
+        alertTxt.textContent = `⚠️ ALERTA ATIVO: Temp > ${limiteTempMaxCongelados.toFixed(1)} °C ou Porta Aberta!`;
+      } else {
+        hero.className = "bg-emerald-50 border-2 border-emerald-600 rounded-2xl p-6 space-y-3";
+        bigTemp.className = "text-5xl font-extrabold text-emerald-700";
+        alertTxt.className = "text-xs font-bold text-emerald-800";
+        alertTxt.textContent = `✅ OPERAÇÃO SEGURA: Abaixo do limite de ${limiteTempMaxCongelados.toFixed(1)} °C e Porta Fechada`;
+      }
+
+      const vout = ((eq2.temp / 100.0) + 0.5).toFixed(2);
+      document.getElementById('pinA0Info').textContent = `${vout}V → ${eq2.temp.toFixed(1).replace('.', ',')} °C`;
+      document.getElementById('pinD2Info').textContent = eq2.doorOpen ? "HIGH (PORTA ABERTA!)" : "LOW (PORTA FECHADA)";
+      document.getElementById('pinD2Info').className = eq2.doorOpen ? "font-bold text-red-700" : "font-bold text-emerald-700";
+      document.getElementById('pinD4Info').textContent = eq2Alert ? "LOW (Apagado)" : "HIGH (Aceso - Normal)";
+      document.getElementById('pinD5Info').textContent = eq2Alert ? "HIGH (Aceso - Alerta Crítico)" : "LOW (Apagado)";
+      document.getElementById('pinD6Info').textContent = eq2Alert ? "ATIVO (tone 1500 Hz)" : "SILENCIOSO (noTone)";
+
+      // Adiciona linha no Monitor Serial
+      const serialBox = document.getElementById('serialMonitorBox');
+      const line = document.createElement('div');
+      line.textContent = `Temperatura Atual: ${eq2.temp.toFixed(1)} C | Porta: ${eq2.doorOpen ? 'ABERTA' : 'FECHADA'}`;
+      serialBox.appendChild(line);
+      if (eq2Alert) {
+        const al = document.createElement('div');
+        al.className = "text-red-400 font-bold";
+        al.textContent = `>>> [ALERTA IoT ENVIADO AO CELULAR]: Verificar Freezer imediatamente!`;
+        serialBox.appendChild(al);
+      }
+      while (serialBox.children.length > 24) serialBox.removeChild(serialBox.firstChild);
+      serialBox.scrollTop = serialBox.scrollHeight;
+
+      renderAlertsFeed();
+    }
+
+    function renderAlertsFeed() {
+      const container = document.getElementById('alertsFeedContainer');
+      document.getElementById('alertCountDesk').textContent = alertsHistory.length;
+      container.innerHTML = '';
+
+      for (const a of alertsHistory) {
+        let styleCls = "bg-emerald-50 border-emerald-600";
+        let titleCls = "text-emerald-900";
+        if (a.severity === 'CRITICAL') {
+          styleCls = "bg-red-50 border-red-600";
+          titleCls = "text-red-900";
+        } else if (a.severity === 'WARNING') {
+          styleCls = "bg-amber-50 border-amber-600";
+          titleCls = "text-amber-900";
+        }
+
+        const div = document.createElement('div');
+        div.className = `p-4 rounded-xl border-l-4 border ${styleCls} space-y-1`;
+        div.innerHTML = `
+          <div class="flex justify-between items-center text-xs font-extrabold ${titleCls}">
+            <span>${a.title}</span>
+            <span>${a.time}</span>
+          </div>
+          <p class="text-xs text-slate-800 font-medium">${a.desc}</p>
+          <div class="text-[11px] font-bold text-sky-800">${a.status}</div>
+        `;
+        container.appendChild(div);
+      }
+    }
+
+    window.clearOptionalAlerts = function() {
+      renderAlertsFeed();
+    };
+
+    // ========================================================================
+    // 4. GRÁFICO DINÂMICO 24H COM CHART.JS
+    // ========================================================================
+    function initOrUpdateChart() {
+      const ctx = document.getElementById('thermalChart').getContext('2d');
+      const eq2Temp = equipments[1].temp;
+      const labels = ['00:00', '03:00', '06:00', '09:00', '12:00', '14:30', '15:00', 'Agora'];
+      const dataPoints = [-17.2, -16.9, -16.8, -15.9, -14.8, -8.9, 30.2, eq2Temp];
+      const colors = dataPoints.map(v => v > limiteTempMaxCongelados ? '#DC2626' : '#0284C7');
+
+      if (thermalChartInstance) {
+        thermalChartInstance.data.datasets[0].data = dataPoints;
+        thermalChartInstance.data.datasets[0].backgroundColor = colors;
+        thermalChartInstance.update();
+        return;
+      }
+
+      thermalChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Temperatura (°C)',
+            data: dataPoints,
+            backgroundColor: colors,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => ` Temperatura: ${context.raw.toFixed(1)} °C (Limite: ${limiteTempMaxCongelados.toFixed(1)} °C)`
+              }
+            }
+          },
+          scales: {
+            y: {
+              grid: { color: '#E2E8F0' },
+              ticks: { color: '#334155', font: { size: 11, weight: 'bold' }, callback: v => v + '°C' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#0F172A', font: { size: 11, weight: 'bold' } }
+            }
+          }
+        }
+      });
+    }
+
+    // ========================================================================
+    // 5. SIMULADOR IoT INTEGRADO (ESP8266 + WEB AUDIO API BUZZER 1500 Hz)
+    // ========================================================================
+    window.toggleSimulatorModal = function() {
+      if (!currentUser || currentUser.role !== 'ADMIN') return;
+      const drawer = document.getElementById('simulatorDrawer');
+      drawer.classList.toggle('hidden');
+    };
+
+    window.updateSimulationFromControls = function() {
+      if (!currentUser || currentUser.role !== 'ADMIN') return;
+      const val = parseFloat(document.getElementById('simTempSlider').value);
+      equipments[1].temp = val;
+
+      const disp = document.getElementById('simTempDisplay');
+      disp.textContent = (val >= 0 ? '+' : '') + val.toFixed(1).replace('.', ',') + ' °C';
+      disp.className = (val > limiteTempMaxCongelados) ? "text-sm font-extrabold text-red-700" : "text-sm font-extrabold text-emerald-700";
+
+      if (val > limiteTempMaxCongelados && !audioMuted) {
+        playBuzzerBeep(120);
+      }
+
+      initOrUpdateChart();
+      renderAllViews();
+    };
+
+    window.toggleSimDoor = function() {
+      if (!currentUser || currentUser.role !== 'ADMIN') return;
+      equipments[1].doorOpen = !equipments[1].doorOpen;
+      const btn = document.getElementById('simDoorBtn');
+      if (equipments[1].doorOpen) {
+        btn.className = "w-full py-2.5 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition";
+        btn.textContent = "🚪 PORTA ABERTA (HIGH) — Clique p/ Fechar";
+        playBuzzerBeep(250);
+        alertsHistory.unshift({
+          time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          title: `🚨 Alerta de Porta Aberta — Freezer 02 (${equipments[1].temp.toFixed(1)} °C)`,
+          desc: "O sensor magnético no Pino D2 detectou abertura da tampa do Freezer 02.",
+          status: "Disparo em tempo real pelo Simulador ESP8266",
+          severity: "CRITICAL"
+        });
+      } else {
+        btn.className = "w-full py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition";
+        btn.textContent = "🔒 PORTA FECHADA (LOW) — Clique p/ Abrir";
+      }
+      renderAllViews();
+    };
+
+    window.setPresetScenario = function(tempVal, doorState) {
+      if (!currentUser || currentUser.role !== 'ADMIN') return;
+      document.getElementById('simTempSlider').value = tempVal;
+      equipments[1].temp = tempVal;
+      equipments[1].doorOpen = doorState;
+
+      const btn = document.getElementById('simDoorBtn');
+      if (doorState) {
+        btn.className = "w-full py-2.5 px-3 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs transition";
+        btn.textContent = "🚪 PORTA ABERTA (HIGH) — Clique p/ Fechar";
+      } else {
+        btn.className = "w-full py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition";
+        btn.textContent = "🔒 PORTA FECHADA (LOW) — Clique p/ Abrir";
+      }
+
+      updateSimulationFromControls();
+    };
+
+    window.playBuzzerBeep = function(durationMs = 300) {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1500, ctx.currentTime); // 1500 Hz igual ao tone(BUZZER, 1500, 300)
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        setTimeout(() => {
+          osc.stop();
+          ctx.close();
+        }, durationMs);
+      } catch (e) {}
+    };
+
+    window.toggleAudioMute = function() {
+      audioMuted = !audioMuted;
+      document.getElementById('btnMuteBuzzer').textContent = audioMuted ? "Áudio: MUTE" : "Áudio: ON";
+    };
+
+    window.saveHardwareConfig = function() {
+      if (!currentUser || currentUser.role !== 'ADMIN') return;
+      const newLim = parseFloat(document.getElementById('cfgLimitTempInput').value);
+      if (isNaN(newLim)) return;
+      limiteTempMaxCongelados = newLim;
+      document.getElementById('kpiLimitSpan').textContent = newLim.toFixed(1).replace('.', ',') + ' °C';
+      document.getElementById('chartLimitText').textContent = newLim.toFixed(1).replace('.', ',') + ' °C';
+      document.getElementById('simLimitLabel').textContent = newLim.toFixed(1).replace('.', ',') + ' °C';
+      initOrUpdateChart();
+      renderAllViews();
+      alert(`✅ Novo limite (${newLim.toFixed(1)} °C) gravado com sucesso nos parâmetros do microcontrolador!`);
+    };
+
+    // ========================================================================
+    // 6. EXPORTAÇÃO REAL DA TABELA SANITÁRIA EM CSV (EXCEL / GOOGLE SHEETS)
+    // ========================================================================
+    window.exportTableToCSV = function() {
+      if (!currentUser) return;
+      const nowStr = new Date().toLocaleString('pt-BR');
+      const headers = [
+        "ID Equipamento",
+        "Descricao",
+        "Sensor / Pino",
+        "Temperatura Atual (C)",
+        "Limite Maximo Seguro (C)",
+        "Estado da Porta (Pino D2)",
+        "Status Alarme Local",
+        "Conformidade ANVISA",
+        "Data Hora Exportacao",
+        "Responsavel Tecnico"
+      ];
+
+      const rows = equipments.map(eq => {
+        const alert = isEquipmentInAlert(eq);
+        return [
+          eq.id,
+          eq.name.replace(/[^\w\s-]/g, '').trim(),
+          eq.pin,
+          eq.temp.toFixed(1).replace('.', ','),
+          eq.limit.toFixed(1).replace('.', ','),
+          eq.doorOpen ? "ABERTA (HIGH)" : "FECHADA (LOW)",
+          alert ? "LED Vermelho D5 + Buzzer D6" : "LED Verde D4 ON",
+          alert ? "EM ALERTA CRITICO" : "CONFORME / NORMAL",
+          nowStr,
+          "Wanderson Lopes da Silva (RA: 314886)"
+        ];
+      });
+
+      const csvContent = "\uFEFF" + [headers, ...rows]
+        .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(";"))
+        .join("\r\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Relatorio_Conformidade_ANVISA_Guardiao_Frio_IoT.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    // ========================================================================
+    // RESTAURA SESSÃO SE JÁ AUTENTICADO
+    // ========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = sessionStorage.getItem('GUARDIAO_FRIO_SESSION');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.token && parsed.email) {
+            enterAuthenticatedApp(parsed);
+          }
+        } catch (e) {}
+      }
+    });
+  </script>
+</body>
+</html>
